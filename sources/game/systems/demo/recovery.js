@@ -11,6 +11,13 @@ function recovery(entities) {
 
             const data = awareness[key];
 
+            if (data.modified && data.modified > 0) {
+
+                data.elapsed += this.delta.update * (1 + (2 * (data.modified - 1) / 10));
+
+                delete data.modified;
+            }
+
             if (data.elapsed >= data.duration) {
 
                 data.callback(entity);

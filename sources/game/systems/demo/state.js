@@ -14,7 +14,17 @@ function state(entities) {
         const left = this.grid[(x - 1) + 10 * (y)];
         const lefttop = this.grid[(x - 1) + 10 * (y - 1)];
 
-        const neighbors = [top, topright, right, rightbottom, bottom, bottomleft, left, lefttop];
+        const neighbors = [];
+
+        if (y > 0) neighbors.push(top)
+        if (y > 0 && (x + 1) % 10 !== 0) neighbors.push(topright)
+        if ((x + 1) % 10 !== 0) neighbors.push(right)
+        if (y < 9 && (x + 1) % 10 !== 0) neighbors.push(rightbottom)
+        if (y < 9) neighbors.push(bottom)
+        if (y < 9 && x % 10 !== 0) neighbors.push(bottomleft)
+        if (x % 10 !== 0) neighbors.push(left)
+        if (y > 0 && x % 10 !== 0) neighbors.push(lefttop)
+
         const awareness = entity.get('awareness').states;
 
         Object.keys(awareness).forEach((key) => {
@@ -28,7 +38,7 @@ function state(entities) {
                 && neighbor.has('generate') === true
                 && neighbor.get('generate').states.indexOf(state) !== -1) {
 
-                    data.elapsed += this.delta.update;
+                    data.modified = data.modified ? data.modified += 1 : 1;
                 }
             });
         });
